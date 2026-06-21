@@ -1,0 +1,34 @@
+name: Update Wembley Calendar Daily
+
+on:
+  schedule:
+    # Runs everyday at 4:00 AM UTC
+    - cron: '0 4 * * *'
+  workflow_dispatch: # Allows you to force-run it manually via a button click
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-python: '3.10'
+
+    - name: Install Dependencies
+      run: |
+        pip install requests beautifulsoup4 icalendar
+
+    - name: Run Scraper Script
+      run: python scrape_to_ics.py
+
+    - name: Commit and Push updated ICS file
+      run: |
+        git config --global user.name "Wembley Bot"
+        git config --global user.email "bot@github.com"
+        git add wembley_traffic.ics
+        git commit -m "Automated daily calendar update" || exit 0
+        git push
