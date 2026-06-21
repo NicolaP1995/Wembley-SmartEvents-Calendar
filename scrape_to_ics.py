@@ -69,7 +69,7 @@ def get_stadium_events():
 
 
 def add_ovo_arena_events(cal):
-    """Scrapes OVO Arena events and adds them directly to the active calendar."""
+    """Scrapes OVO Arena events using text-pattern tracking."""
     url = "https://www.ovoarena.co.uk/events"
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
     
@@ -80,50 +80,73 @@ def add_ovo_arena_events(cal):
             return
             
         soup = BeautifulSoup(response.text, 'html.parser')
-        event_cards = soup.find_all('div', class_='c-card-event')
         
-        print(f"Scraping OVO Arena... Found {len(event_cards)} items.")
+        # Matches formats like "Fri 26 Jun 2026" or "Friday 26 Jun 2026"
+        date_pattern = re.compile(r'\b(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*\s+\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4}\b')
         
-        for card in event_cards:
-            title_tag = card.find('h3', class_='c-card-event__title')
-            date_tag = card.find('div', class_='c-card-event__date')
+        date_nodes = soup.find_all(string=date_pattern)
+        print(f"Scraping OVO Arena... Found {len(date_nodes)} text matches.")
+        
+        for node in date_nodes:
+            date_str = date_pattern.search(node).group()
             
-            if title_tag and date_tag:
-                title = title_tag.get_text(strip=True)
-                raw_date = date_tag.get_text(strip=True)
-                
-                try:
-                    clean_date_str = " ".join(raw_date.split())
-                    # Parses dates formatted like: "Friday 26 Jun 2026"
-                    event_date = datetime.strptime(clean_date_str, "%A %d %b %Y")
-                except ValueError:
-                    continue
+            # Walk up to find the contextual text wrapper block for the title
+            parent = node.parent
+            context_text = ""
+            for _ in range(4):
+                if parent:
+                    context_text += " " + parent.get_text(separator=" ", strip=True)
+                    parent = parent.parent
+            
+            # Clean up double spacing
+            context_text = " ".join(context_text.split())
+            
+            # Find closest heading or link for the event title
+            title = "OVO Arena Event"
+            current = node.parent
+            found_title = False
+            for _ in range(4):
+                if current and not found_title:
+                    heading = current.find(['h3', 'h2', 'h4', 'a'])
+                    if heading:
+                        txt = heading.get_text(strip=True)
+                        if txt and len(txt) > 3 and not date_pattern.search(txt) and "event" not in txt.lower():
+                            title = txt
+                            found_title = True
+                if current:
+                    current = current.parent
 
-                # OVO Arena default: assume typical show timing entry windows
-                start_time = event_date.replace(hour=18, minute=30)
-                
-                # --- OVO CAPACITY LOGIC (12,500 people) ---
-                # 1.5 Hour pre-event congestion buffer
-                busy_start = start_time - timedelta(hours=1, minutes=30)
-                busy_end = start_time + timedelta(hours=3, minutes=30)
+            try:
+                # Standardize strings like "Friday 26 Jun 2026" to datetime object
+                clean_date = " ".join(date_str.split())
+                # Truncate weekday long names to 3 letters to keep format standard
+                parts = clean_date.split()
+                parts[0] = parts[0][:3]
+                parsed_date = datetime.strptime(" ".join(parts), "%a %d %b %Y")
+            except ValueError:
+                continue
 
-                e = Event()
-                e.add('summary', f"🎤 [ARENA] {title}")
-                e.add('dtstart', busy_start)
-                e.add('dtend', busy_end)
-                e.add('location', 'OVO Arena Wembley')
-                e.add('description', (
-                    f"LOCAL AREA CONGESTION WARNING\n"
-                    f"---------------------------\n"
-                    f"Venue: OVO Arena Wembley\n"
-                    f"Event: {title}\n\n"
-                    f"🚨 Medium density crowds expected around the Arena floor and Wembley Park Station."
-                ))
-                cal.add_component(e)
+            # Standard Arena doors time setup
+            start_time = parsed_date.replace(hour=18, minute=30)
+            busy_start = start_time - timedelta(hours=1, minutes=30)
+            busy_end = start_time + timedelta(hours=3, minutes=30)
+
+            e = Event()
+            e.add('summary', f"🎤 [ARENA] {title}")
+            e.add('dtstart', busy_start)
+            e.add('dtend', busy_end)
+            e.add('location', 'OVO Arena Wembley')
+            e.add('description', (
+                f"LOCAL AREA CONGESTION WARNING\n"
+                f"---------------------------\n"
+                f"Venue: OVO Arena Wembley\n"
+                f"Event: {title}\n\n"
+                f"🚨 Medium density crowds expected around the Arena floor and Wembley Park Station."
+            ))
+            cal.add_component(e)
                 
     except Exception as e:
         print(f"Error reading OVO Arena data: {e}")
-
 
 def generate_ics():
     """The master compilation zone linking the scraping blocks together."""
