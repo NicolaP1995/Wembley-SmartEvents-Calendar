@@ -1,0 +1,320 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Wembley Local Crowd Alerts//EN
+X-WR-CALTIMEZONE:Europe/London
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Harry Styles
+DTSTART:20260623T143000
+DTEND:20260623T210000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Harry Styles\nScheduled Start: 17:00\n\n🚶 Influx Peak (Station 
+ packed): 14:30 -> 17:00\n🚗 Efflux Peak (Leaving venue): 17:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Harry Styles
+DTSTART:20260626T143000
+DTEND:20260626T210000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Harry Styles\nScheduled Start: 17:00\n\n🚶 Influx Peak (Station 
+ packed): 14:30 -> 17:00\n🚗 Efflux Peak (Leaving venue): 17:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Harry Styles
+DTSTART:20260627T143000
+DTEND:20260627T210000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Harry Styles\nScheduled Start: 17:00\n\n🚶 Influx Peak (Station 
+ packed): 14:30 -> 17:00\n🚗 Efflux Peak (Leaving venue): 17:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Harry Styles
+DTSTART:20260629T163000
+DTEND:20260629T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Harry Styles\nScheduled Start: 19:00 (Time is TBC\, applied defaul
+ t 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 E
+ fflux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Harry Styles
+DTSTART:20260701T163000
+DTEND:20260701T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Harry Styles\nScheduled Start: 19:00 (Time is TBC\, applied defaul
+ t 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 E
+ fflux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Harry Styles
+DTSTART:20260703T143000
+DTEND:20260703T210000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Harry Styles\nScheduled Start: 17:00\n\n🚶 Influx Peak (Station 
+ packed): 14:30 -> 17:00\n🚗 Efflux Peak (Leaving venue): 17:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Harry Styles
+DTSTART:20260704T143000
+DTEND:20260704T210000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Harry Styles\nScheduled Start: 17:00\n\n🚶 Influx Peak (Station 
+ packed): 14:30 -> 17:00\n🚗 Efflux Peak (Leaving venue): 17:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] My Chemical Romance
+DTSTART:20260708T163000
+DTEND:20260708T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: My Chemical Romance\nScheduled Start: 19:00 (Time is TBC\, applied
+  default 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\
+ n🚗 Efflux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] My Chemical Romance
+DTSTART:20260710T163000
+DTEND:20260710T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: My Chemical Romance\nScheduled Start: 19:00 (Time is TBC\, applied
+  default 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\
+ n🚗 Efflux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] My Chemical Romance
+DTSTART:20260711T163000
+DTEND:20260711T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: My Chemical Romance\nScheduled Start: 19:00 (Time is TBC\, applied
+  default 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\
+ n🚗 Efflux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Bruno Mars
+DTSTART:20260718T163000
+DTEND:20260718T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Bruno Mars\nScheduled Start: 19:00 (Time is TBC\, applied default 
+ 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
+ lux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Bruno Mars
+DTSTART:20260719T163000
+DTEND:20260719T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Bruno Mars\nScheduled Start: 19:00 (Time is TBC\, applied default 
+ 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
+ lux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Bruno Mars
+DTSTART:20260722T163000
+DTEND:20260722T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Bruno Mars\nScheduled Start: 19:00 (Time is TBC\, applied default 
+ 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
+ lux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Bruno Mars
+DTSTART:20260724T163000
+DTEND:20260724T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Bruno Mars\nScheduled Start: 19:00 (Time is TBC\, applied default 
+ 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
+ lux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Bruno Mars
+DTSTART:20260725T163000
+DTEND:20260725T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Bruno Mars\nScheduled Start: 19:00 (Time is TBC\, applied default 
+ 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
+ lux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Bruno Mars
+DTSTART:20260728T163000
+DTEND:20260728T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Bruno Mars\nScheduled Start: 19:00 (Time is TBC\, applied default 
+ 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
+ lux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Luke Combs
+DTSTART:20260731T163000
+DTEND:20260731T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Luke Combs\nScheduled Start: 19:00 (Time is TBC\, applied default 
+ 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
+ lux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Luke Combs
+DTSTART:20260801T163000
+DTEND:20260801T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Luke Combs\nScheduled Start: 19:00 (Time is TBC\, applied default 
+ 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
+ lux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Luke Combs
+DTSTART:20260802T163000
+DTEND:20260802T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Luke Combs\nScheduled Start: 19:00 (Time is TBC\, applied default 
+ 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
+ lux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] The Weeknd
+DTSTART:20260814T163000
+DTEND:20260814T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: The Weeknd\nScheduled Start: 19:00 (Time is TBC\, applied default 
+ 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
+ lux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] The Weeknd
+DTSTART:20260815T163000
+DTEND:20260815T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: The Weeknd\nScheduled Start: 19:00 (Time is TBC\, applied default 
+ 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
+ lux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] The Weeknd
+DTSTART:20260816T163000
+DTEND:20260816T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: The Weeknd\nScheduled Start: 19:00 (Time is TBC\, applied default 
+ 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
+ lux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] The Weeknd
+DTSTART:20260818T163000
+DTEND:20260818T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: The Weeknd\nScheduled Start: 19:00 (Time is TBC\, applied default 
+ 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
+ lux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] The Weeknd
+DTSTART:20260819T163000
+DTEND:20260819T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: The Weeknd\nScheduled Start: 19:00 (Time is TBC\, applied default 
+ 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
+ lux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] AEW All In: London
+DTSTART:20260830T163000
+DTEND:20260830T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: AEW All In: London\nScheduled Start: 19:00 (Time is TBC\, applied 
+ default 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n
+ 🚗 Efflux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Bon Jovi
+DTSTART:20260904T163000
+DTEND:20260904T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Bon Jovi\nScheduled Start: 19:00 (Time is TBC\, applied default 19
+ :00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Efflu
+ x Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Bon Jovi
+DTSTART:20260906T163000
+DTEND:20260906T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Bon Jovi\nScheduled Start: 19:00 (Time is TBC\, applied default 19
+ :00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Efflu
+ x Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Bon Jovi
+DTSTART:20260909T163000
+DTEND:20260909T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Bon Jovi\nScheduled Start: 19:00 (Time is TBC\, applied default 19
+ :00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Efflu
+ x Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Diljit Dosanjh
+DTSTART:20260912T163000
+DTEND:20260912T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Diljit Dosanjh\nScheduled Start: 19:00 (Time is TBC\, applied defa
+ ult 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗
+  Efflux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Union Jack Classic
+DTSTART:20260919T163000
+DTEND:20260919T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Union Jack Classic\nScheduled Start: 19:00 (Time is TBC\, applied 
+ default 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n
+ 🚗 Efflux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] England v Czechia
+DTSTART:20261006T171500
+DTEND:20261006T234500
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: England v Czechia\nScheduled Start: 19:45\n\n🚶 Influx Peak (Sta
+ tion packed): 17:15 -> 19:45\n🚗 Efflux Peak (Leaving venue): 19:45 onwa
+ rds.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Jacksonville Jaguars 2026
+DTSTART:20261018T120000
+DTEND:20261018T183000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Jacksonville Jaguars 2026\nScheduled Start: 14:30\n\n🚶 Influx P
+ eak (Station packed): 12:00 -> 14:30\n🚗 Efflux Peak (Leaving venue): 14
+ :30 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+END:VCALENDAR
