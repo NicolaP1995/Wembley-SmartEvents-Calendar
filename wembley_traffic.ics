@@ -4,15 +4,6 @@ PRODID:-//Wembley Local Crowd Alerts//EN
 X-WR-CALTIMEZONE:Europe/London
 BEGIN:VEVENT
 SUMMARY:⚠️ [STADIUM] Harry Styles
-DTSTART:20260623T143000
-DTEND:20260623T210000
-DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
- t Name: Harry Styles\nScheduled Start: 17:00\n\n🚶 Influx Peak (Station 
- packed): 14:30 -> 17:00\n🚗 Efflux Peak (Leaving venue): 17:00 onwards.
-LOCATION:Wembley Stadium & Olympic Way
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:⚠️ [STADIUM] Harry Styles
 DTSTART:20260626T143000
 DTEND:20260626T210000
 DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
