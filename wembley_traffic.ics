@@ -4,16 +4,6 @@ PRODID:-//Wembley Local Crowd Alerts//EN
 X-WR-CALTIMEZONE:Europe/London
 BEGIN:VEVENT
 SUMMARY:⚠️ [STADIUM] Harry Styles
-DTSTART:20260701T163000
-DTEND:20260701T230000
-DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
- t Name: Harry Styles\nScheduled Start: 19:00 (Time is TBC\, applied defaul
- t 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 E
- fflux Peak (Leaving venue): 19:00 onwards.
-LOCATION:Wembley Stadium & Olympic Way
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:⚠️ [STADIUM] Harry Styles
 DTSTART:20260703T143000
 DTEND:20260703T210000
 DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
@@ -258,6 +248,16 @@ DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
  t Name: Union Jack Classic\nScheduled Start: 19:00 (Time is TBC\, applied 
  default 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n
  🚗 Efflux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] England v Spain
+DTSTART:20260926T171500
+DTEND:20260926T234500
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: England v Spain\nScheduled Start: 19:45\n\n🚶 Influx Peak (Stati
+ on packed): 17:15 -> 19:45\n🚗 Efflux Peak (Leaving venue): 19:45 onward
+ s.
 LOCATION:Wembley Stadium & Olympic Way
 END:VEVENT
 BEGIN:VEVENT
