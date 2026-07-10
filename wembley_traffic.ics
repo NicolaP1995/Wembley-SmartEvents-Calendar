@@ -4,16 +4,6 @@ PRODID:-//Wembley Local Crowd Alerts//EN
 X-WR-CALTIMEZONE:Europe/London
 BEGIN:VEVENT
 SUMMARY:⚠️ [STADIUM] My Chemical Romance
-DTSTART:20260708T163000
-DTEND:20260708T230000
-DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
- t Name: My Chemical Romance\nScheduled Start: 19:00 (Time is TBC\, applied
-  default 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\
- n🚗 Efflux Peak (Leaving venue): 19:00 onwards.
-LOCATION:Wembley Stadium & Olympic Way
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:⚠️ [STADIUM] My Chemical Romance
 DTSTART:20260710T163000
 DTEND:20260710T230000
 DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
