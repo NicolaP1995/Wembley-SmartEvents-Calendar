@@ -31,4 +31,5 @@ jobs:
         git config --global user.email "bot@github.com"
         git add wembley_traffic.ics
         git commit -m "Automated daily calendar update" || exit 0
+        git pull --rebase origin main
         git push
