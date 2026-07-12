@@ -26,12 +26,7 @@ jobs:
       run: python scrape_to_ics.py
 
     - name: Commit and Push updated ICS file
-      run: |
-        git config --global user.name "Wembley Bot"
-        git config --global user.email "bot@github.com"
-        git add wembley_traffic.ics
-        git commit -m "Automated daily calendar update" || exit 0
-        
-        # Pull the absolute newest changes to align histories, then push smoothly
-        git pull origin main --rebase -X theirs
-        git push origin main
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "Automated daily calendar update"
+        file_pattern: "wembley_traffic.ics"
