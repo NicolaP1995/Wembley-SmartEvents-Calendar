@@ -189,13 +189,13 @@ def generate_ics():
     # 2. RUN ALONGSIDE: Pass the calendar to the OVO Arena parser to inject its entries
     add_ovo_arena_events(cal)
 
-    # Export data cleanly to the root directory
+    # Save the file cleanly to the root directory only
     output_path = "wembley_traffic.ics"
 
-    with open(output_path, "wb") as f_root:
-        f_root.write(cal.to_ical())
+    with open(output_path, "wb") as f:
+        f.write(cal.to_ical())
         
-    print("Successfully compiled merged calendar datasets to root directory!")
+    print("Successfully compiled calendar data directly to the root directory!")
         
     # Also overwrite the root file so your Github hosted copy changes instantly
     with open("wembley_traffic.ics", "wb") as f_root:
