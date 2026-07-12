@@ -30,3 +30,4 @@ jobs:
       with:
         commit_message: "Automated daily calendar update"
         file_pattern: "wembley_traffic.ics"
+        
