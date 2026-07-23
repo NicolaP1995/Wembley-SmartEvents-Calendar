@@ -4,16 +4,6 @@ PRODID:-//Wembley Local Crowd Alerts//EN
 X-WR-CALTIMEZONE:Europe/London
 BEGIN:VEVENT
 SUMMARY:⚠️ [STADIUM] Bruno Mars
-DTSTART:20260722T163000
-DTEND:20260722T230000
-DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
- t Name: Bruno Mars\nScheduled Start: 19:00 (Time is TBC\, applied default 
- 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
- lux Peak (Leaving venue): 19:00 onwards.
-LOCATION:Wembley Stadium & Olympic Way
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:⚠️ [STADIUM] Bruno Mars
 DTSTART:20260724T163000
 DTEND:20260724T230000
 DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
