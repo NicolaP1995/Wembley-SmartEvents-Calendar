@@ -102,4 +102,14 @@ DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
  rds.
 LOCATION:Wembley Stadium & Olympic Way
 END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚠️ [STADIUM] Noah Kahan
+DTSTART:20270723T163000
+DTEND:20270723T230000
+DESCRIPTION:EXPECTED AREA TRAFFIC ALERT\n---------------------------\nEven
+ t Name: Noah Kahan\nScheduled Start: 19:00 (Time is TBC\, applied default 
+ 19:00 rule)\n\n🚶 Influx Peak (Station packed): 16:30 -> 19:00\n🚗 Eff
+ lux Peak (Leaving venue): 19:00 onwards.
+LOCATION:Wembley Stadium & Olympic Way
+END:VEVENT
 END:VCALENDAR
