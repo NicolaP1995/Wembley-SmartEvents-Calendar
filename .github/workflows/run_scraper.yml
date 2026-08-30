@@ -20,7 +20,8 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        pip install requests beautifulsoup4 icalendar
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
     - name: Run Scraper Script
       run: python scrape_to_ics.py
@@ -29,6 +30,6 @@ jobs:
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
         commit_message: "Automated daily calendar update"
-        file_pattern: "wembley_traffic.ics"
+        file_pattern: "*.ics"
         skip_dirty_check: true
         create_branch: false
