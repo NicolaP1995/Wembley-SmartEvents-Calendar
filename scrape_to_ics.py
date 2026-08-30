@@ -38,16 +38,18 @@ def fetch_wembley_stadium_events():
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
         
-        cards = soup.find_all(["div", "article", "li"], class_=re.compile(r"event|card|listing", re.I))
-        print(f"  Found {len(cards)} raw cards on Stadium page.")
+        # Target list items or blocks on the official stadium events page
+        cards = soup.find_all(["li", "div", "article"], class_=re.compile(r"event|item|card|row", re.I))
+        print(f"  Found {len(cards)} elements on Stadium page.")
         
         for card in cards:
-            title_el = card.find(["h2", "h3", "h4"])
+            title_el = card.find(["h2", "h3", "h4", "a"], class_=re.compile(r"title|heading", re.I)) or card.find(["h2", "h3", "h4"])
             if not title_el:
                 continue
                 
             title = clean_text(title_el.get_text())
-            if not title or len(title) < 3:
+            # Skip short ui text matches
+            if not title or len(title) < 4 or "filter" in title.lower():
                 continue
 
             link_el = card.find("a", href=True)
@@ -55,7 +57,7 @@ def fetch_wembley_stadium_events():
             if event_url.startswith("/"):
                 event_url = f"https://www.wembleystadium.com{event_url}"
 
-            date_el = card.find(class_=re.compile(r"date|time", re.I))
+            date_el = card.find(class_=re.compile(r"date|time|meta", re.I))
             date_str = clean_text(date_el.get_text()) if date_el else ""
 
             events.append({
@@ -80,8 +82,12 @@ def fetch_ovo_arena_events():
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
         
-        cards = soup.find_all(["article", "div"], class_=re.compile(r"event|card|item", re.I))
-        print(f"  Found {len(cards)} raw cards on OVO page.")
+        # Restrict to explicit article elements to prevent duplication loops
+        cards = soup.find_all("article")
+        if not cards:
+            cards = soup.find_all("div", class_=re.compile(r"event-item", re.I))
+            
+        print(f"  Found {len(cards)} clean event blocks on OVO page.")
         
         for card in cards:
             title_el = card.find(["h2", "h3", "h4"])
@@ -123,7 +129,7 @@ def generate_ics(events, filename="wembley_events.ics"):
     cal.add('x-wr-timezone', 'Europe/London')
 
     parsed_count = 0
-    seen_events = set() # Deduplication tracker
+    seen_events = set()
 
     for event_data in events:
         start_dt = parse_event_date(event_data['date_raw'])
@@ -131,7 +137,7 @@ def generate_ics(events, filename="wembley_events.ics"):
         if not start_dt:
             continue
             
-        # Create a unique key for deduplication (Title + Date)
+        # Strict deduplication based on exact title and date
         dedup_key = (event_data['title'].lower(), start_dt.strftime('%Y-%m-%d'))
         if dedup_key in seen_events:
             continue
