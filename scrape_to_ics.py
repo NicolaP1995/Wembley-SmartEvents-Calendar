@@ -28,68 +28,6 @@ def parse_event_date(date_str):
     except (ValueError, TypeError):
         return None
 
-def fetch_wembley_stadium_events():
-    print("Scraping Wembley Stadium...")
-    events = []
-    # Using their main events sub-pages or general listing paths if available
-    url = "https://www.wembleystadium.com/events"
-    
-    try:
-        response = requests.get(url, headers=HEADERS, timeout=15)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, "html.parser")
-        
-        # Wembley Stadium often lists events inside specific anchor structures or data blocks
-        cards = soup.select("a[href*='/events/']")
-        print(f"  Found {len(cards)} event links on Wembley Stadium page.")
-        
-        seen_urls = set()
-        
-        for card in cards:
-            href = card.get("href")
-            if not href or href in seen_urls:
-                continue
-                
-            # Filter out generic navigation links
-            if href == "/events" or href == "/events/" or "category" in href:
-                continue
-                
-            seen_urls.add(href)
-            if href.startswith("/"):
-                event_url = f"https://www.wembleystadium.com{href}"
-            else:
-                event_url = href
-
-            title = clean_text(card.get_text())
-            # If the link text is just "Find out more" or too short, look for a heading inside
-            if len(title) < 5:
-                heading = card.find(["h2", "h3", "h4", "span"])
-                if heading:
-                    title = clean_text(heading.get_text())
-
-            if not title or len(title) < 4 or "wembley stadium" in title.lower():
-                continue
-
-            # Attempt to find a date near the card parent
-            parent = card.find_parent(["article", "div", "li"])
-            date_str = ""
-            if parent:
-                date_el = parent.find(class_=re.compile(r"date|time|meta|sub", re.I))
-                if date_el:
-                    date_str = clean_text(date_el.get_text())
-
-            events.append({
-                "title": f"[Stadium] {title}",
-                "location": "Wembley Stadium, London HA9 0WS, UK",
-                "url": event_url,
-                "date_raw": date_str,
-                "venue": "Wembley Stadium"
-            })
-    except Exception as e:
-        print(f"Error fetching Wembley Stadium: {e}")
-        
-    return events
-
 def fetch_ovo_arena_events():
     print("Scraping OVO Arena Wembley...")
     events = []
@@ -100,12 +38,10 @@ def fetch_ovo_arena_events():
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
         
-        # Strictly target unique article cards within the main grid container to stop duplicates
-        container = soup.find(class_=re.compile(r"event-list|events-grid|grid|listing", re.I))
-        cards = container.find_all("article") if container else soup.find_all("article")
+        cards = soup.find_all("article")
+        print(f"  Found {len(cards)} raw cards on OVO page.")
         
-        print(f"  Found {len(cards)} clean event blocks on OVO page.")
-        seen_titles = set()
+        seen_urls = set()
         
         for card in cards:
             title_el = card.find(["h2", "h3", "h4"])
@@ -115,16 +51,19 @@ def fetch_ovo_arena_events():
             title = clean_text(title_el.get_text())
             if not title or len(title) < 3:
                 continue
-                
-            # Exact title deduplication to prevent carousel vs grid duplication
-            if title in seen_titles:
-                continue
-            seen_titles.add(title)
 
             link_el = card.find("a", href=True)
-            event_url = link_el["href"] if link_el else url
+            if not link_el:
+                continue
+                
+            event_url = link_el["href"]
             if event_url.startswith("/"):
                 event_url = f"https://www.ovoarena.co.uk{event_url}"
+                
+            # Use the unique event URL to completely prevent carousel vs grid duplication
+            if event_url in seen_urls:
+                continue
+            seen_urls.add(event_url)
 
             date_el = card.find(class_=re.compile(r"date|time|day|month", re.I))
             date_str = clean_text(date_el.get_text()) if date_el else ""
@@ -188,12 +127,9 @@ def generate_ics(events, filename="wembley_events.ics"):
     print(f"Calendar successfully generated with {parsed_count} unique valid events!")
 
 if __name__ == "__main__":
-    stadium_events = fetch_wembley_stadium_events()
     ovo_events = fetch_ovo_arena_events()
     
-    all_events = stadium_events + ovo_events
-    
-    if all_events:
-        generate_ics(all_events)
+    if ovo_events:
+        generate_ics(ovo_events)
     else:
-        print("No events found across both venues. ICS not generated.")
+        print("No events found. ICS not generated.")
