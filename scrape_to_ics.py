@@ -1,222 +1,488 @@
-import re
-import json
 import hashlib
-from datetime import datetime, timedelta
+import json
+import re
+from datetime import datetime, timedelta, date
+from urllib.parse import urljoin
+
 import requests
 from bs4 import BeautifulSoup
+from dateutil import parser
 from icalendar import Calendar, Event
 import pytz
-from dateutil import parser
+
 
 UK_TZ = pytz.timezone("Europe/London")
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/139.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
 }
 
-def clean_text(text):
-    if not text:
+REQUEST_TIMEOUT = 20
+
+VENUES = {
+    "stadium": {
+        "name": "Wembley Stadium",
+        "prefix": "Stadium",
+        "events_url": "https://www.wembleystadium.com/events",
+        "base_url": "https://www.wembleystadium.com",
+        "location": "Wembley Stadium, London HA9 0WS, UK",
+    },
+    "ovo": {
+        "name": "OVO Arena",
+        "prefix": "OVO Arena",
+        "events_url": "https://www.ovoarena.co.uk/events/search",
+        "base_url": "https://www.ovoarena.co.uk",
+        "location": (
+            "The OVO Arena, Wembley, Arena Square, Engineers Way, "
+            "Wembley Park, Wembley, HA9 0AA, UK"
+        ),
+    },
+}
+
+
+def clean_text(value):
+    """Normalise whitespace and remove surrounding whitespace."""
+    if not value:
         return ""
-    return re.sub(r'\s+', ' ', text).strip()
+
+    return re.sub(r"\s+", " ", str(value)).strip()
+
+
+def absolute_url(url, base_url):
+    """Convert relative event URLs to absolute URLs."""
+    if not url:
+        return ""
+
+    return urljoin(base_url, url)
+
+
+def flatten_json_ld(data):
+    """
+    Yield JSON-LD objects from:
+      - a single object
+      - a list
+      - @graph
+    """
+    if isinstance(data, list):
+        for item in data:
+            yield from flatten_json_ld(item)
+
+    elif isinstance(data, dict):
+        if "@graph" in data and isinstance(data["@graph"], list):
+            for item in data["@graph"]:
+                yield from flatten_json_ld(item)
+        else:
+            yield data
+
+
+def is_event_schema(item):
+    """Return True for Schema.org Event objects."""
+    event_type = item.get("@type")
+
+    if isinstance(event_type, list):
+        return "Event" in event_type
+
+    return event_type == "Event"
+
 
 def parse_event_date(date_str):
+    """
+    Parse an event date safely.
+
+    IMPORTANT:
+    Do not remove '-' from the input. ISO dates such as
+    2026-09-02T19:00:00+01:00 depend on those hyphens.
+
+    Returns:
+        (datetime/date, has_time)
+    """
     if not date_str:
-        return None
-    clean_str = re.sub(r"(?i)(Doors open|Doors|from|to|TBC|Postponed|Rescheduled|-.*)", "", date_str).strip()
+        return None, False
+
+    raw = clean_text(date_str)
+
+    # Detect whether the source actually supplied a time.
+    has_time = bool(
+        re.search(
+            r"\b\d{1,2}:\d{2}\b",
+            raw,
+        )
+        or re.search(r"T\d{2}:\d{2}", raw)
+        or re.search(r"\d{1,2}\s*(?:am|pm)\b", raw, re.I)
+        or re.search(r"[+-]\d{2}:?\d{2}$", raw)
+        or raw.endswith("Z")
+    )
+
+    # Remove only known textual qualifiers.
+    cleaned = re.sub(
+        r"\b(?:Doors?\s+open|Doors|Postponed|Rescheduled|TBC)\b",
+        "",
+        raw,
+        flags=re.I,
+    )
+
+    cleaned = re.sub(r"\s+", " ", cleaned).strip(" ,|-")
+
     try:
-        dt = parser.parse(clean_str, fuzzy=True)
+        dt = parser.isoparse(cleaned)
+
         if dt.tzinfo is None:
-            return UK_TZ.localize(dt)
-        return dt.astimezone(UK_TZ)
+            dt = UK_TZ.localize(dt)
+        else:
+            dt = dt.astimezone(UK_TZ)
+
+        return dt, has_time
+
     except (ValueError, TypeError):
-        return None
+        pass
 
-def extract_json_ld_events(soup, venue_prefix, default_location, venue_name):
+    # Fallback for human-readable dates.
+    try:
+        dt = parser.parse(cleaned, fuzzy=True)
+
+        if dt.tzinfo is None:
+            dt = UK_TZ.localize(dt)
+        else:
+            dt = dt.astimezone(UK_TZ)
+
+        return dt, has_time
+
+    except (ValueError, TypeError, OverflowError):
+        return None, False
+
+
+def extract_json_ld_events(soup, venue):
+    """
+    Extract Schema.org Event objects from JSON-LD.
+
+    This handles both direct Event objects and @graph structures.
+    """
     events = []
+
     for script in soup.find_all("script", type="application/ld+json"):
-        try:
-            data = json.loads(script.string or script.text)
-            # Handle list of schemas or single schema
-            items = data if isinstance(data, list) else [data]
-            for item in items:
-                if item.get("@type") == "Event" or (isinstance(item.get("@type"), list) and "Event" in item.get("@type")):
-                    title = item.get("name")
-                    start_date = item.get("startDate")
-                    url = item.get("url", "")
-                    
-                    loc_data = item.get("location", {})
-                    location = default_location
-                    if isinstance(loc_data, dict):
-                        loc_name = loc_data.get("name")
-                        address = loc_data.get("address")
-                        if isinstance(address, dict):
-                            street = address.get("streetAddress", "")
-                            locality = address.get("addressLocality", "")
-                            postal = address.get("postalCode", "")
-                            location = f"{loc_name}, {street}, {locality} {postal}".strip(", ")
-                        elif loc_name:
-                            location = loc_name
+        raw = script.string or script.get_text()
 
-                    if title and start_date:
-                        events.append({
-                            "title": f"[{venue_prefix}] {clean_text(title)}",
-                            "location": location,
-                            "url": url,
-                            "date_raw": start_date,
-                            "venue": venue_name
-                        })
-        except Exception:
+        if not raw:
             continue
+
+        try:
+            data = json.loads(raw)
+        except (json.JSONDecodeError, TypeError):
+            continue
+
+        for item in flatten_json_ld(data):
+            if not is_event_schema(item):
+                continue
+
+            title = clean_text(item.get("name"))
+            start_date = item.get("startDate")
+            event_url = item.get("url", "")
+
+            if not title or not start_date:
+                continue
+
+            # Schema.org location handling.
+            location = venue["location"]
+            location_data = item.get("location")
+
+            if isinstance(location_data, dict):
+                location_name = clean_text(location_data.get("name"))
+
+                address = location_data.get("address")
+
+                if isinstance(address, dict):
+                    parts = [
+                        clean_text(address.get("streetAddress")),
+                        clean_text(address.get("addressLocality")),
+                        clean_text(address.get("postalCode")),
+                    ]
+
+                    parts = [p for p in parts if p]
+
+                    if location_name:
+                        location = ", ".join([location_name] + parts)
+                    elif parts:
+                        location = ", ".join(parts)
+
+                elif location_name:
+                    location = location_name
+
+            events.append(
+                {
+                    "title": f'[{venue["prefix"]}] {title}',
+                    "location": location,
+                    "url": absolute_url(event_url, venue["base_url"]),
+                    "date_raw": str(start_date),
+                    "venue": venue["name"],
+                }
+            )
+
     return events
 
-def fetch_wembley_stadium_events():
-    print("Scraping Wembley Stadium...")
-    events = []
-    url = "https://www.wembleystadium.com/events"
-    
+
+def extract_event_links(soup, venue):
+    """
+    Extract likely event detail links from a listing page.
+
+    Used as a secondary source when JSON-LD is incomplete.
+    """
+    links = []
+
+    for link in soup.find_all("a", href=True):
+        href = link["href"]
+        text = clean_text(link.get_text(" ", strip=True))
+
+        if not text or len(text) < 3:
+            continue
+
+        full_url = absolute_url(href, venue["base_url"])
+
+        # Avoid navigation and generic links.
+        if "/events/" not in full_url.lower():
+            continue
+
+        links.append((text, full_url))
+
+    # Preserve order while removing duplicates.
+    seen = set()
+    result = []
+
+    for text, url in links:
+        if url in seen:
+            continue
+
+        seen.add(url)
+        result.append((text, url))
+
+    return result
+
+
+def fetch_event_page(event_url, venue):
+    """
+    Fetch an individual event page and attempt to obtain a more
+    authoritative Event schema.
+    """
     try:
-        response = requests.get(url, headers=HEADERS, timeout=15)
+        response = requests.get(
+            event_url,
+            headers=HEADERS,
+            timeout=REQUEST_TIMEOUT,
+        )
         response.raise_for_status()
+
         soup = BeautifulSoup(response.text, "html.parser")
-        
-        # 1. Try JSON-LD structured data first (most reliable)
-        events = extract_json_ld_events(soup, "Stadium", "Wembley Stadium, London HA9 0WS, UK", "Wembley Stadium")
-        print(f"  Found {len(events)} events via JSON-LD on Stadium page.")
-        
-        # 2. Fallback to HTML card parsing if JSON-LD isn't present
-        if not events:
-            cards = soup.find_all(["div", "article", "li", "a"], class_=re.compile(r"event|card|item|listing", re.I))
-            print(f"  Found {len(cards)} raw elements via HTML fallback.")
-            
-            for card in cards:
-                title_el = card.find(["h2", "h3", "h4", "span"]) if card.name != "a" else card
-                title = clean_text(title_el.get_text()) if title_el else ""
-                
-                if not title or len(title) < 4 or "filter" in title.lower() or "wembley stadium" in title.lower():
-                    continue
+        events = extract_json_ld_events(soup, venue)
 
-                link_el = card if card.name == "a" else card.find("a", href=True)
-                event_url = link_el["href"] if link_el else url
-                if event_url.startswith("/"):
-                    event_url = f"https://www.wembleystadium.com{event_url}"
+        if events:
+            # The event detail page should normally contain one event.
+            return events[0]
 
-                date_el = card.find(class_=re.compile(r"date|time|meta", re.I))
-                date_str = clean_text(date_el.get_text()) if date_el else ""
+    except requests.RequestException as exc:
+        print(f"    Event page failed: {event_url} ({exc})")
 
-                events.append({
-                    "title": f"[Stadium] {title}",
-                    "location": "Wembley Stadium, London HA9 0WS, UK",
-                    "url": event_url,
-                    "date_raw": date_str,
-                    "venue": "Wembley Stadium"
-                })
-    except Exception as e:
-        print(f"Error fetching Wembley Stadium: {e}")
-        
-    return events
+    return None
 
-def fetch_ovo_arena_events():
-    print("Scraping OVO Arena Wembley...")
-    events = []
-    url = "https://www.ovoarena.co.uk/events"
-    
+
+def fetch_venue_events(venue):
+    """
+    Fetch all events for a venue.
+
+    Primary:
+        JSON-LD from listing page.
+
+    Secondary:
+        Event detail pages discovered from listing links.
+    """
+    print(f"Scraping {venue['name']}...")
+
     try:
-        response = requests.get(url, headers=HEADERS, timeout=15)
+        response = requests.get(
+            venue["events_url"],
+            headers=HEADERS,
+            timeout=REQUEST_TIMEOUT,
+        )
         response.raise_for_status()
-        soup = BeautifulSoup(response.text, "html.parser")
-        
-        # 1. Try JSON-LD structured data first
-        events = extract_json_ld_events(soup, "OVO Arena", "OVO Arena Wembley, Arena Square, Engineers Way, London HA9 0AA, UK", "OVO Arena")
-        print(f"  Found {len(events)} events via JSON-LD on OVO page.")
-        
-        # 2. Fallback to HTML card parsing
-        if not events:
-            cards = soup.find_all("article")
-            print(f"  Found {len(cards)} raw cards via HTML fallback.")
-            
-            for card in cards:
-                title_el = card.find(["h2", "h3", "h4"])
-                if not title_el:
-                    continue
-                    
-                title = clean_text(title_el.get_text())
-                if not title or len(title) < 3:
-                    continue
+    except requests.RequestException as exc:
+        print(f"  Failed to fetch {venue['events_url']}: {exc}")
+        return []
 
-                link_el = card.find("a", href=True)
-                event_url = link_el["href"] if link_el else url
-                if event_url.startswith("/"):
-                    event_url = f"https://www.ovoarena.co.uk{event_url}"
+    soup = BeautifulSoup(response.text, "html.parser")
 
-                date_el = card.find(class_=re.compile(r"date|time|day|month", re.I))
-                date_str = clean_text(date_el.get_text()) if date_el else ""
+    # Primary source: structured data.
+    events = extract_json_ld_events(soup, venue)
 
-                events.append({
-                    "title": f"[OVO Arena] {title}",
-                    "location": "OVO Arena Wembley, Arena Square, Engineers Way, London HA9 0AA, UK",
-                    "url": event_url,
-                    "date_raw": date_str,
-                    "venue": "OVO Arena"
-                })
-    except Exception as e:
-        print(f"Error fetching OVO Arena: {e}")
-        
+    print(f"  JSON-LD events found: {len(events)}")
+
+    # Secondary source: discover detail pages.
+    links = extract_event_links(soup, venue)
+
+    if links:
+        print(f"  Candidate event links: {len(links)}")
+
+    known_urls = {
+        event["url"]
+        for event in events
+        if event.get("url")
+    }
+
+    # Only follow links not already represented by JSON-LD.
+    #
+    # Limit the number of requests so a broken listing page cannot
+    # cause an excessive crawl.
+    for _, event_url in links:
+        if event_url in known_urls:
+            continue
+
+        detail_event = fetch_event_page(event_url, venue)
+
+        if detail_event:
+            events.append(detail_event)
+            known_urls.add(event_url)
+
     return events
+
+
+def make_uid(event_data, start_dt):
+    """
+    Generate a stable UID.
+
+    Venue is included so the same event title/date at two venues
+    cannot collide.
+    """
+    identity = "|".join(
+        [
+            event_data["venue"],
+            clean_text(event_data["title"]).lower(),
+            start_dt.isoformat(),
+        ]
+    )
+
+    digest = hashlib.sha256(identity.encode("utf-8")).hexdigest()[:32]
+
+    return f"{digest}@wembley-smartevents"
+
 
 def generate_ics(events, filename="wembley_events.ics"):
     print(f"\nGenerating {filename}...")
-    
-    cal = Calendar()
-    cal.add('prodid', '-//Wembley SmartEvents Calendar//EN')
-    cal.add('version', '2.0')
-    cal.add('calscale', 'GREGORIAN')
-    cal.add('x-wr-calname', 'Wembley Events (Stadium & OVO)')
-    cal.add('x-wr-timezone', 'Europe/London')
 
-    parsed_count = 0
-    seen_events = set()
+    cal = Calendar()
+
+    cal.add("prodid", "-//Wembley SmartEvents Calendar//EN")
+    cal.add("version", "2.0")
+    cal.add("calscale", "GREGORIAN")
+    cal.add("method", "PUBLISH")
+    cal.add("x-wr-calname", "Wembley Events (Stadium & OVO)")
+    cal.add("x-wr-timezone", "Europe/London")
+
+    now = datetime.now(UK_TZ)
+
+    seen = set()
+    parsed_events = []
 
     for event_data in events:
-        start_dt = parse_event_date(event_data['date_raw'])
-        
+        start_dt, has_time = parse_event_date(event_data.get("date_raw"))
+
         if not start_dt:
-            print(f"  Skipping (Invalid date): {event_data['title']} (Raw: {event_data['date_raw']})")
+            print(
+                "  Skipping invalid date: "
+                f"{event_data['title']} "
+                f"(raw={event_data.get('date_raw')!r})"
+            )
             continue
-            
-        dedup_key = (event_data['title'].lower(), start_dt.strftime('%Y-%m-%d'))
-        if dedup_key in seen_events:
+
+        dedup_key = (
+            event_data["venue"].lower(),
+            clean_text(event_data["title"]).lower(),
+            start_dt.isoformat(),
+        )
+
+        if dedup_key in seen:
             continue
-        seen_events.add(dedup_key)
-            
+
+        seen.add(dedup_key)
+        parsed_events.append((event_data, start_dt, has_time))
+
+    # Chronological order.
+    parsed_events.sort(key=lambda item: item[1])
+
+    for event_data, start_dt, has_time in parsed_events:
         event = Event()
-        event.add('summary', event_data['title'])
-        event.add('location', event_data['location'])
-        event.add('description', f"Venue: {event_data['venue']}\nRaw Date: {event_data['date_raw']}\nMore info: {event_data['url']}")
-        
-        uid_hash = hashlib.md5(f"{event_data['title']}{event_data['date_raw']}".encode('utf-8')).hexdigest()
-        event.add('uid', f"{uid_hash}@wembley-smartevents")
-        
-        if start_dt.hour == 0 and start_dt.minute == 0:
-            event.add('dtstart', start_dt.date())
+
+        event.add("uid", make_uid(event_data, start_dt))
+        event.add("dtstamp", now)
+
+        event.add("summary", clean_text(event_data["title"]))
+        event.add("location", clean_text(event_data["location"]))
+
+        description = (
+            f"Venue: {event_data['venue']}\n"
+            f"Source date: {event_data['date_raw']}\n"
+            f"More info: {event_data['url']}"
+        )
+
+        event.add("description", description)
+
+        if has_time:
+            event.add("dtstart", start_dt)
+
+            # Traffic-calendar window:
+            # start 2.5 hours before the event and end 4 hours after.
+            #
+            # If you want the calendar to represent the actual event
+            # rather than traffic impact, change these to:
+            #
+            #   event.add("dtstart", start_dt)
+            #   event.add("dtend", start_dt + timedelta(hours=3))
+            #
+            # The original README describes the traffic-window behaviour.
+            traffic_start = start_dt - timedelta(hours=2.5)
+            traffic_end = start_dt + timedelta(hours=4)
+
+            event["dtstart"] = traffic_start
+            event.add("dtend", traffic_end)
+
         else:
-            event.add('dtstart', start_dt)
-            event.add('dtend', start_dt + timedelta(hours=3))
+            # Date-only/TBC event.
+            event.add("dtstart", start_dt.date())
 
         cal.add_component(event)
-        parsed_count += 1
 
-    with open(filename, 'wb') as f:
-        f.write(cal.to_ical())
-        
-    print(f"Calendar successfully generated with {parsed_count} unique valid events!")
+    if not parsed_events:
+        raise RuntimeError(
+            "No valid events were found. Existing ICS was not overwritten."
+        )
+
+    with open(filename, "wb") as output:
+        output.write(cal.to_ical())
+
+    print(
+        f"Calendar successfully generated with "
+        f"{len(parsed_events)} unique events."
+    )
+
+
+def main():
+    stadium_events = fetch_venue_events(VENUES["stadium"])
+    ovo_events = fetch_venue_events(VENUES["ovo"])
+
+    all_events = stadium_events + ovo_events
+
+    print(
+        f"\nTotal events collected: {len(all_events)} "
+        f"(Stadium={len(stadium_events)}, OVO={len(ovo_events)})"
+    )
+
+    if not all_events:
+        print("No events found. Existing calendar was not changed.")
+        return
+
+    generate_ics(all_events)
+
 
 if __name__ == "__main__":
-    stadium_events = fetch_wembley_stadium_events()
-    ovo_events = fetch_ovo_arena_events()
-    
-    all_events = stadium_events + ovo_events
-    
-    if all_events:
-        generate_ics(all_events)
-    else:
-        print("No events found across both venues. ICS not generated.")
+    main()
