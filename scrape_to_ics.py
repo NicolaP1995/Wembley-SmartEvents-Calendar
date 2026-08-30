@@ -38,26 +38,35 @@ def fetch_wembley_stadium_events():
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
         
-        # Target list items or blocks on the official stadium events page
-        cards = soup.find_all(["li", "div", "article"], class_=re.compile(r"event|item|card|row", re.I))
-        print(f"  Found {len(cards)} elements on Stadium page.")
+        # Look for event cards, anchor links containing event paths, or structured blocks
+        cards = soup.find_all(["div", "article", "li"], class_=re.compile(r"event|card|listing|item", re.I))
         
+        # Fallback: if class matching is too strict, look for links pointing to event subpaths
+        if not cards:
+            cards = soup.find_all("a", href=re.compile(r"/events/", re.I))
+
+        print(f"  Found {len(cards)} potential elements on Wembley Stadium page.")
+        seen_titles = set()
+
         for card in cards:
-            title_el = card.find(["h2", "h3", "h4", "a"], class_=re.compile(r"title|heading", re.I)) or card.find(["h2", "h3", "h4"])
-            if not title_el:
+            # Extract title
+            title_el = card.find(["h2", "h3", "h4", "span"]) if hasattr(card, "find") else None
+            title = clean_text(title_el.get_text()) if title_el else clean_text(card.get_text() if card.name == 'a' else "")
+            
+            if not title or len(title) < 4 or "filter" in title.lower() or "wembley" in title.lower():
                 continue
                 
-            title = clean_text(title_el.get_text())
-            # Skip short ui text matches
-            if not title or len(title) < 4 or "filter" in title.lower():
+            if title in seen_titles:
                 continue
+            seen_titles.add(title)
 
-            link_el = card.find("a", href=True)
-            event_url = link_el["href"] if link_el else url
+            # Extract link
+            event_url = card.get("href") if card.name == "a" else (card.find("a", href=True)["href"] if card.find("a", href=True) else url)
             if event_url.startswith("/"):
                 event_url = f"https://www.wembleystadium.com{event_url}"
 
-            date_el = card.find(class_=re.compile(r"date|time|meta", re.I))
+            # Extract date if available
+            date_el = card.find(class_=re.compile(r"date|time|meta", re.I)) if hasattr(card, "find") else None
             date_str = clean_text(date_el.get_text()) if date_el else ""
 
             events.append({
@@ -82,12 +91,11 @@ def fetch_ovo_arena_events():
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
         
-        # Restrict to explicit article elements to prevent duplication loops
-        cards = soup.find_all("article")
-        if not cards:
-            cards = soup.find_all("div", class_=re.compile(r"event-item", re.I))
-            
-        print(f"  Found {len(cards)} clean event blocks on OVO page.")
+        container = soup.find(class_=re.compile(r"event-list|events-grid|grid", re.I))
+        cards = container.find_all("article") if container else soup.find_all("article")
+        
+        print(f"  Found {len(cards)} event cards on OVO page.")
+        seen_titles = set()
         
         for card in cards:
             title_el = card.find(["h2", "h3", "h4"])
@@ -95,8 +103,9 @@ def fetch_ovo_arena_events():
                 continue
                 
             title = clean_text(title_el.get_text())
-            if not title or len(title) < 3:
+            if not title or len(title) < 3 or title in seen_titles:
                 continue
+            seen_titles.add(title)
 
             link_el = card.find("a", href=True)
             event_url = link_el["href"] if link_el else url
@@ -134,10 +143,10 @@ def generate_ics(events, filename="wembley_events.ics"):
     for event_data in events:
         start_dt = parse_event_date(event_data['date_raw'])
         
+        # If the date couldn't be parsed from the raw text, we skip or handle gracefully
         if not start_dt:
             continue
             
-        # Strict deduplication based on exact title and date
         dedup_key = (event_data['title'].lower(), start_dt.strftime('%Y-%m-%d'))
         if dedup_key in seen_events:
             continue
