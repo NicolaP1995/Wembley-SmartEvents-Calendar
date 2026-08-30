@@ -4,4 +4,68 @@ PRODID:-//Wembley SmartEvents Calendar//EN
 CALSCALE:GREGORIAN
 X-WR-CALNAME:Wembley Events (Stadium & OVO)
 X-WR-TIMEZONE:Europe/London
+BEGIN:VEVENT
+SUMMARY:[OVO Arena] XG WORLD TOUR: THE CORE
+DTSTART;VALUE=DATE:20260830
+UID:8fea037b6e80a2aca9f0712de0b4079d@wembley-smartevents
+DESCRIPTION:Venue: OVO Arena\nRaw Date: 2026-09-02T19:00:00+01:00\nMore in
+ fo: https://www.ovoarena.co.uk/events/detail/xg-1
+LOCATION:The OVO Arena\, Wembley\, Arena Square\, Engineers Way\, Wembley 
+ Park\, Wembley
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:[OVO Arena] The Neighbourhood
+DTSTART;VALUE=DATE:20260830
+UID:3c5623a6f9c55e4c082e2771615a7423@wembley-smartevents
+DESCRIPTION:Venue: OVO Arena\nRaw Date: 2026-09-04T18:00:00+01:00\nMore in
+ fo: https://www.ovoarena.co.uk/events/detail/the-neighourhood
+LOCATION:The OVO Arena\, Wembley\, Arena Square\, Engineers Way\, Wembley 
+ Park\, Wembley
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:[OVO Arena] CANCELLED - BINI
+DTSTART;VALUE=DATE:20260830
+UID:2c60bbba4096dd5f2c8e1f06c46db437@wembley-smartevents
+DESCRIPTION:Venue: OVO Arena\nRaw Date: 2026-09-06T19:00:00+01:00\nMore in
+ fo: https://www.ovoarena.co.uk/events/detail/bini
+LOCATION:The OVO Arena\, Wembley\, Arena Square\, Engineers Way\, Wembley 
+ Park\, Wembley
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:[OVO Arena] ITZY
+DTSTART;VALUE=DATE:20260830
+UID:31f7f374410e0ba3383a875631e017d4@wembley-smartevents
+DESCRIPTION:Venue: OVO Arena\nRaw Date: 2026-09-11T18:00:00+01:00\nMore in
+ fo: https://www.ovoarena.co.uk/events/detail/itzy-1
+LOCATION:The OVO Arena\, Wembley\, Arena Square\, Engineers Way\, Wembley 
+ Park\, Wembley
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:[OVO Arena] Mis-Teeq
+DTSTART;VALUE=DATE:20260830
+UID:fa8b5b9e49ff1db5e2c0fb9e7f22ecf6@wembley-smartevents
+DESCRIPTION:Venue: OVO Arena\nRaw Date: 2026-09-12T18:00:00+01:00\nMore in
+ fo: https://www.ovoarena.co.uk/events/detail/mis-teeq
+LOCATION:The OVO Arena\, Wembley\, Arena Square\, Engineers Way\, Wembley 
+ Park\, Wembley
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:[OVO Arena] Deva Live In UK 2.0
+DTSTART;VALUE=DATE:20260830
+UID:48b516c00bb43fe63867f2f3f55c5929@wembley-smartevents
+DESCRIPTION:Venue: OVO Arena\nRaw Date: 2026-09-13T18:00:00+01:00\nMore in
+ fo: https://www.ovoarena.co.uk/events/detail/deva-live-in-uk-20-deva-live-
+ in-uk-20
+LOCATION:The OVO Arena\, Wembley\, Arena Square\, Engineers Way\, Wembley 
+ Park\, Wembley
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:[OVO Arena] André Rieu
+DTSTART;VALUE=DATE:20260830
+UID:940c7a31ba75b6041e4ac3cfc95f6ef6@wembley-smartevents
+DESCRIPTION:Venue: OVO Arena\nRaw Date: 2026-09-17T18:00:00+01:00\nMore in
+ fo: https://www.ovoarena.co.uk/events/detail/andre-rieu-16
+LOCATION:The OVO Arena\, Wembley\, Arena Square\, Engineers Way\, Wembley 
+ Park\, Wembley
+END:VEVENT
 END:VCALENDAR
