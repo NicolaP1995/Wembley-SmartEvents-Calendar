@@ -1,207 +1,185 @@
-import os
+import re
+import hashlib
+from datetime import datetime, timedelta
 import requests
 from bs4 import BeautifulSoup
-import re
-from datetime import datetime, timedelta
 from icalendar import Calendar, Event
+import pytz
+from dateutil import parser
 
-def get_stadium_events():
-    """Scrapes Wembley Stadium website events."""
+# Set the timezone to local UK time
+UK_TZ = pytz.timezone("Europe/London")
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+}
+
+def clean_text(text):
+    """Strips excessive whitespace and newlines from scraped text."""
+    if not text:
+        return ""
+    return re.sub(r'\s+', ' ', text).strip()
+
+def parse_event_date(date_str):
+    """
+    Attempts to parse a variety of messy scraped date formats into a timezone-aware datetime object.
+    Returns None if parsing fails entirely.
+    """
+    if not date_str:
+        return None
+        
+    # Clean up common text phrases that trip up the date parser
+    clean_str = re.sub(r"(?i)(Doors open|Doors|from|to|TBC|Postponed|Rescheduled|-.*)", "", date_str).strip()
+    
+    try:
+        # fuzzy=True allows the parser to ignore unrecognized words
+        dt = parser.parse(clean_str, fuzzy=True)
+        return UK_TZ.localize(dt)
+    except (ValueError, TypeError):
+        return None
+
+def fetch_wembley_stadium_events():
+    print("Scraping Wembley Stadium...")
+    events = []
     url = "https://www.wembleystadium.com/events"
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
     
     try:
-        response = requests.get(url, headers=headers, timeout=15)
+        response = requests.get(url, headers=HEADERS, timeout=15)
         response.raise_for_status()
-    except Exception as e:
-        print(f"Error fetching Stadium page: {e}")
-        return []
-
-    soup = BeautifulSoup(response.text, "html.parser")
-    events_data = []
-    
-    date_pattern = re.compile(r'\b\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4}\b')
-    time_pattern = re.compile(r'\b(?:[01]\d|2[0-3]):[0-5]\d\b')
-
-    date_nodes = soup.find_all(string=date_pattern)
-    
-    for node in date_nodes:
-        date_str = date_pattern.search(node).group()
+        soup = BeautifulSoup(response.text, "html.parser")
         
-        parent = node.parent
-        context_text = ""
-        for _ in range(4): 
-            if parent:
-                context_text += " " + parent.get_text(separator=" ", strip=True)
-                parent = parent.parent
+        # Stadium layout heuristic: Find event containers
+        cards = soup.find_all(["div", "article", "li"], class_=re.compile(r"event|card|listing", re.I))
         
-        times = time_pattern.findall(context_text)
-        event_time = times[0] if times else "19:00"
-        
-        title = "Wembley Stadium Event"
-        current = node.parent
-        found_title = False
-        
-        for _ in range(5):
-            if current and not found_title:
-                link_or_header = current.find(['a', 'h2', 'h3', 'h4'], class_=lambda c: c and any(x in c.lower() for x in ['title', 'header', 'name']))
-                if not link_or_header:
-                    link_or_header = current.find(['h3', 'h2', 'a'])
+        for card in cards:
+            title_el = card.find(["h2", "h3", "h4"])
+            if not title_el:
+                continue
                 
-                if link_or_header:
-                    txt = link_or_header.get_text(strip=True)
-                    if txt and len(txt) > 3 and not date_pattern.search(txt) and "event" not in txt.lower():
-                        title = txt
-                        found_title = True
-            if current:
-                current = current.parent
-
-        if "Past Events" not in title:
-            entry = {
-                "title": title,
-                "date_str": f"{date_str} {event_time}",
-                "is_tbc": len(times) == 0
-            }
-            if entry not in events_data:
-                events_data.append(entry)
-                
-    return events_data
-
-
-def add_ovo_arena_events(cal):
-    """Scrapes OVO Arena events using text-pattern tracking."""
-    url = "https://www.ovoarena.co.uk/events"
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
-    
-    try:
-        response = requests.get(url, headers=headers, timeout=15)
-        if response.status_code != 200:
-            print(f"Skipping OVO Arena: Status code {response.status_code}")
-            return
-            
-        soup = BeautifulSoup(response.text, 'html.parser')
-        
-        # Matches formats like "Fri 26 Jun 2026" or "Friday 26 Jun 2026"
-        date_pattern = re.compile(r'\b(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*\s+\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4}\b')
-        
-        date_nodes = soup.find_all(string=date_pattern)
-        print(f"Scraping OVO Arena... Found {len(date_nodes)} text matches.")
-        
-        for node in date_nodes:
-            date_str = date_pattern.search(node).group()
-            
-            # Walk up to find the contextual text wrapper block for the title
-            parent = node.parent
-            context_text = ""
-            for _ in range(4):
-                if parent:
-                    context_text += " " + parent.get_text(separator=" ", strip=True)
-                    parent = parent.parent
-            
-            # Clean up double spacing
-            context_text = " ".join(context_text.split())
-            
-            # Find closest heading or link for the event title
-            title = "OVO Arena Event"
-            current = node.parent
-            found_title = False
-            for _ in range(4):
-                if current and not found_title:
-                    heading = current.find(['h3', 'h2', 'h4', 'a'])
-                    if heading:
-                        txt = heading.get_text(strip=True)
-                        if txt and len(txt) > 3 and not date_pattern.search(txt) and "event" not in txt.lower():
-                            title = txt
-                            found_title = True
-                if current:
-                    current = current.parent
-
-            try:
-                # Standardize strings like "Friday 26 Jun 2026" to datetime object
-                clean_date = " ".join(date_str.split())
-                # Truncate weekday long names to 3 letters to keep format standard
-                parts = clean_date.split()
-                parts[0] = parts[0][:3]
-                parsed_date = datetime.strptime(" ".join(parts), "%a %d %b %Y")
-            except ValueError:
+            title = clean_text(title_el.get_text())
+            if not title:
                 continue
 
-            # Standard Arena doors time setup
-            start_time = parsed_date.replace(hour=18, minute=30)
-            busy_start = start_time - timedelta(hours=1, minutes=30)
-            busy_end = start_time + timedelta(hours=3, minutes=30)
+            link_el = card.find("a", href=True)
+            event_url = link_el["href"] if link_el else url
+            if event_url.startswith("/"):
+                event_url = f"https://www.wembleystadium.com{event_url}"
 
-            e = Event()
-            e.add('summary', f"🎤 [ARENA] {title}")
-            e.add('dtstart', busy_start)
-            e.add('dtend', busy_end)
-            e.add('location', 'OVO Arena Wembley')
-            e.add('description', (
-                f"LOCAL AREA CONGESTION WARNING\n"
-                f"---------------------------\n"
-                f"Venue: OVO Arena Wembley\n"
-                f"Event: {title}\n\n"
-                f"🚨 Medium density crowds expected around the Arena floor and Wembley Park Station."
-            ))
-            cal.add_component(e)
-                
+            # Target common date elements
+            date_el = card.find(class_=re.compile(r"date|time", re.I))
+            date_str = clean_text(date_el.get_text()) if date_el else ""
+
+            events.append({
+                "title": f"[Stadium] {title}",
+                "location": "Wembley Stadium, London HA9 0WS, UK",
+                "url": event_url,
+                "date_raw": date_str,
+                "venue": "Wembley Stadium"
+            })
     except Exception as e:
-        print(f"Error reading OVO Arena data: {e}")
-
-def generate_ics():
-    """The master compilation zone linking the scraping blocks together."""
-    cal = Calendar()
-    cal.add('prodid', '-//Wembley Local Crowd Alerts//EN')
-    cal.add('version', '2.0')
-    cal.add('x-wr-caltimezone', 'Europe/London')
-
-    # 1. Run the Stadium block
-    print("Scraping Wembley Stadium...")
-    stadium_events = get_stadium_events()
-    for ev in stadium_events:
-        try:
-            event_start = datetime.strptime(ev['date_str'], "%d %b %Y %H:%M")
-        except ValueError:
-            continue
-
-        # --- STADIUM CAPACITY LOGIC (80,000+ people) ---
-        # Intense 2.5 Hour pre-event transit lock
-        busy_start = event_start - timedelta(hours=2, minutes=30) 
-        busy_end = event_start + timedelta(hours=4)
-
-        e = Event()
-        e.add('summary', f"⚠️ [STADIUM] {ev['title']}")
-        e.add('dtstart', busy_start)
-        e.add('dtend', busy_end)
-        e.add('location', 'Wembley Stadium & Olympic Way')
+        print(f"Error fetching Wembley Stadium: {e}")
         
-        tbc_note = " (Time is TBC, applied default 19:00 rule)" if ev['is_tbc'] else ""
-        e.add('description', (
-            f"EXPECTED AREA TRAFFIC ALERT\n"
-            f"---------------------------\n"
-            f"Event Name: {ev['title']}\n"
-            f"Scheduled Start: {event_start.strftime('%H:%M')}{tbc_note}\n\n"
-            f"🚶 Influx Peak (Station packed): {busy_start.strftime('%H:%M')} -> {event_start.strftime('%H:%M')}\n"
-            f"🚗 Efflux Peak (Leaving venue): {event_start.strftime('%H:%M')} onwards."
-        ))
-        cal.add_component(e)
+    return events
 
-    # 2. RUN ALONGSIDE: Pass the calendar to the OVO Arena parser to inject its entries
-    add_ovo_arena_events(cal)
+def fetch_ovo_arena_events():
+    print("Scraping OVO Arena Wembley...")
+    events = []
+    url = "https://www.ovoarena.co.uk/events"
+    
+    try:
+        response = requests.get(url, headers=HEADERS, timeout=15)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, "html.parser")
+        
+        # OVO layout heuristic: Find event containers
+        cards = soup.find_all(["article", "div"], class_=re.compile(r"event|card|item", re.I))
+        
+        for card in cards:
+            title_el = card.find(["h2", "h3", "h4"])
+            if not title_el:
+                continue
+                
+            title = clean_text(title_el.get_text())
+            # Skip empty or generic site navigation headers that get caught
+            if not title or len(title) < 3:
+                continue
 
-    # Save the file cleanly to the root directory only
-    output_path = "wembley_traffic.ics"
+            link_el = card.find("a", href=True)
+            event_url = link_el["href"] if link_el else url
+            if event_url.startswith("/"):
+                event_url = f"https://www.ovoarena.co.uk{event_url}"
 
-    with open(output_path, "wb") as f:
+            # Grab date
+            date_el = card.find(class_=re.compile(r"date|time|day|month", re.I))
+            date_str = clean_text(date_el.get_text()) if date_el else ""
+
+            events.append({
+                "title": f"[OVO Arena] {title}",
+                "location": "OVO Arena Wembley, Arena Square, Engineers Way, London HA9 0AA, UK",
+                "url": event_url,
+                "date_raw": date_str,
+                "venue": "OVO Arena"
+            })
+    except Exception as e:
+        print(f"Error fetching OVO Arena: {e}")
+        
+    return events
+
+def generate_ics(events, filename="wembley_events.ics"):
+    print(f"\nGenerating {filename} with {len(events)} total events...")
+    
+    cal = Calendar()
+    cal.add('prodid', '-//Wembley SmartEvents Calendar//EN')
+    cal.add('version', '2.0')
+    cal.add('calscale', 'GREGORIAN')
+    cal.add('x-wr-calname', 'Wembley Events (Stadium & OVO)')
+    cal.add('x-wr-timezone', 'Europe/London')
+    cal.add('refresh-interval', 'PT12H') # Suggests calendar clients refresh every 12 hours
+
+    parsed_count = 0
+
+    for event_data in events:
+        start_dt = parse_event_date(event_data['date_raw'])
+        
+        if not start_dt:
+            print(f"  [Warning] Could not parse date '{event_data['date_raw']}' for '{event_data['title']}'. Skipping.")
+            continue
+            
+        event = Event()
+        event.add('summary', event_data['title'])
+        event.add('location', event_data['location'])
+        event.add('description', f"Venue: {event_data['venue']}\nRaw Scraped Date: {event_data['date_raw']}\nMore info: {event_data['url']}")
+        
+        # Generate a consistent, unique ID based on title and date so updates don't create duplicates
+        uid_hash = hashlib.md5(f"{event_data['title']}{event_data['date_raw']}".encode('utf-8')).hexdigest()
+        event.add('uid', f"{uid_hash}@wembley-smartevents")
+        
+        # If no time was provided (it parsed as exactly midnight), treat it as an all-day event
+        if start_dt.hour == 0 and start_dt.minute == 0:
+            event.add('dtstart', start_dt.date())
+        else:
+            event.add('dtstart', start_dt)
+            # Default the end time to 3 hours later for standard concerts/matches
+            event.add('dtend', start_dt + timedelta(hours=3))
+
+        cal.add_component(event)
+        parsed_count += 1
+
+    with open(filename, 'wb') as f:
         f.write(cal.to_ical())
         
-    print("Successfully compiled calendar data directly to the root directory!")
-        
-    # Also overwrite the root file so your Github hosted copy changes instantly
-    with open("wembley_traffic.ics", "wb") as f_root:
-        f_root.write(cal.to_ical())
-        
-    print("Successfully compiled merged calendar datasets!")
+    print(f"Calendar successfully generated with {parsed_count} valid events!")
 
 if __name__ == "__main__":
-    generate_ics()
+    stadium_events = fetch_wembley_stadium_events()
+    print(f"-> Found {len(stadium_events)} elements at Wembley Stadium.")
+    
+    ovo_events = fetch_ovo_arena_events()
+    print(f"-> Found {len(ovo_events)} elements at OVO Arena.")
+    
+    all_events = stadium_events + ovo_events
+    
+    if all_events:
+        generate_ics(all_events)
+    else:
+        print("No events found across both venues. ICS not generated.")
