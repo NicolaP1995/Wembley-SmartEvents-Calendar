@@ -31,6 +31,7 @@ def parse_event_date(date_str):
 def fetch_wembley_stadium_events():
     print("Scraping Wembley Stadium...")
     events = []
+    # Using their main events sub-pages or general listing paths if available
     url = "https://www.wembleystadium.com/events"
     
     try:
@@ -38,36 +39,44 @@ def fetch_wembley_stadium_events():
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
         
-        # Look for event cards, anchor links containing event paths, or structured blocks
-        cards = soup.find_all(["div", "article", "li"], class_=re.compile(r"event|card|listing|item", re.I))
+        # Wembley Stadium often lists events inside specific anchor structures or data blocks
+        cards = soup.select("a[href*='/events/']")
+        print(f"  Found {len(cards)} event links on Wembley Stadium page.")
         
-        # Fallback: if class matching is too strict, look for links pointing to event subpaths
-        if not cards:
-            cards = soup.find_all("a", href=re.compile(r"/events/", re.I))
-
-        print(f"  Found {len(cards)} potential elements on Wembley Stadium page.")
-        seen_titles = set()
-
+        seen_urls = set()
+        
         for card in cards:
-            # Extract title
-            title_el = card.find(["h2", "h3", "h4", "span"]) if hasattr(card, "find") else None
-            title = clean_text(title_el.get_text()) if title_el else clean_text(card.get_text() if card.name == 'a' else "")
-            
-            if not title or len(title) < 4 or "filter" in title.lower() or "wembley" in title.lower():
+            href = card.get("href")
+            if not href or href in seen_urls:
                 continue
                 
-            if title in seen_titles:
+            # Filter out generic navigation links
+            if href == "/events" or href == "/events/" or "category" in href:
                 continue
-            seen_titles.add(title)
+                
+            seen_urls.add(href)
+            if href.startswith("/"):
+                event_url = f"https://www.wembleystadium.com{href}"
+            else:
+                event_url = href
 
-            # Extract link
-            event_url = card.get("href") if card.name == "a" else (card.find("a", href=True)["href"] if card.find("a", href=True) else url)
-            if event_url.startswith("/"):
-                event_url = f"https://www.wembleystadium.com{event_url}"
+            title = clean_text(card.get_text())
+            # If the link text is just "Find out more" or too short, look for a heading inside
+            if len(title) < 5:
+                heading = card.find(["h2", "h3", "h4", "span"])
+                if heading:
+                    title = clean_text(heading.get_text())
 
-            # Extract date if available
-            date_el = card.find(class_=re.compile(r"date|time|meta", re.I)) if hasattr(card, "find") else None
-            date_str = clean_text(date_el.get_text()) if date_el else ""
+            if not title or len(title) < 4 or "wembley stadium" in title.lower():
+                continue
+
+            # Attempt to find a date near the card parent
+            parent = card.find_parent(["article", "div", "li"])
+            date_str = ""
+            if parent:
+                date_el = parent.find(class_=re.compile(r"date|time|meta|sub", re.I))
+                if date_el:
+                    date_str = clean_text(date_el.get_text())
 
             events.append({
                 "title": f"[Stadium] {title}",
@@ -91,10 +100,11 @@ def fetch_ovo_arena_events():
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
         
-        container = soup.find(class_=re.compile(r"event-list|events-grid|grid", re.I))
+        # Strictly target unique article cards within the main grid container to stop duplicates
+        container = soup.find(class_=re.compile(r"event-list|events-grid|grid|listing", re.I))
         cards = container.find_all("article") if container else soup.find_all("article")
         
-        print(f"  Found {len(cards)} event cards on OVO page.")
+        print(f"  Found {len(cards)} clean event blocks on OVO page.")
         seen_titles = set()
         
         for card in cards:
@@ -103,7 +113,11 @@ def fetch_ovo_arena_events():
                 continue
                 
             title = clean_text(title_el.get_text())
-            if not title or len(title) < 3 or title in seen_titles:
+            if not title or len(title) < 3:
+                continue
+                
+            # Exact title deduplication to prevent carousel vs grid duplication
+            if title in seen_titles:
                 continue
             seen_titles.add(title)
 
@@ -143,7 +157,6 @@ def generate_ics(events, filename="wembley_events.ics"):
     for event_data in events:
         start_dt = parse_event_date(event_data['date_raw'])
         
-        # If the date couldn't be parsed from the raw text, we skip or handle gracefully
         if not start_dt:
             continue
             
