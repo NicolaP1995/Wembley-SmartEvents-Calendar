@@ -1,4 +1,5 @@
 import re
+import json
 import hashlib
 from datetime import datetime, timedelta
 import requests
@@ -24,9 +25,49 @@ def parse_event_date(date_str):
     clean_str = re.sub(r"(?i)(Doors open|Doors|from|to|TBC|Postponed|Rescheduled|-.*)", "", date_str).strip()
     try:
         dt = parser.parse(clean_str, fuzzy=True)
-        return UK_TZ.localize(dt)
+        if dt.tzinfo is None:
+            return UK_TZ.localize(dt)
+        return dt.astimezone(UK_TZ)
     except (ValueError, TypeError):
         return None
+
+def extract_json_ld_events(soup, venue_prefix, default_location, venue_name):
+    events = []
+    for script in soup.find_all("script", type="application/ld+json"):
+        try:
+            data = json.loads(script.string or script.text)
+            # Handle list of schemas or single schema
+            items = data if isinstance(data, list) else [data]
+            for item in items:
+                if item.get("@type") == "Event" or (isinstance(item.get("@type"), list) and "Event" in item.get("@type")):
+                    title = item.get("name")
+                    start_date = item.get("startDate")
+                    url = item.get("url", "")
+                    
+                    loc_data = item.get("location", {})
+                    location = default_location
+                    if isinstance(loc_data, dict):
+                        loc_name = loc_data.get("name")
+                        address = loc_data.get("address")
+                        if isinstance(address, dict):
+                            street = address.get("streetAddress", "")
+                            locality = address.get("addressLocality", "")
+                            postal = address.get("postalCode", "")
+                            location = f"{loc_name}, {street}, {locality} {postal}".strip(", ")
+                        elif loc_name:
+                            location = loc_name
+
+                    if title and start_date:
+                        events.append({
+                            "title": f"[{venue_prefix}] {clean_text(title)}",
+                            "location": location,
+                            "url": url,
+                            "date_raw": start_date,
+                            "venue": venue_name
+                        })
+        except Exception:
+            continue
+    return events
 
 def fetch_wembley_stadium_events():
     print("Scraping Wembley Stadium...")
@@ -38,32 +79,37 @@ def fetch_wembley_stadium_events():
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
         
-        # Look for general event containers or structured tiles
-        cards = soup.find_all(["div", "article", "li", "a"], class_=re.compile(r"event|card|item|listing", re.I))
-        print(f"  Found {len(cards)} elements on Stadium page.")
+        # 1. Try JSON-LD structured data first (most reliable)
+        events = extract_json_ld_events(soup, "Stadium", "Wembley Stadium, London HA9 0WS, UK", "Wembley Stadium")
+        print(f"  Found {len(events)} events via JSON-LD on Stadium page.")
         
-        for card in cards:
-            title_el = card.find(["h2", "h3", "h4", "span"]) if card.name != "a" else card
-            title = clean_text(title_el.get_text()) if title_el else ""
+        # 2. Fallback to HTML card parsing if JSON-LD isn't present
+        if not events:
+            cards = soup.find_all(["div", "article", "li", "a"], class_=re.compile(r"event|card|item|listing", re.I))
+            print(f"  Found {len(cards)} raw elements via HTML fallback.")
             
-            if not title or len(title) < 4 or "filter" in title.lower() or "wembley stadium" in title.lower():
-                continue
+            for card in cards:
+                title_el = card.find(["h2", "h3", "h4", "span"]) if card.name != "a" else card
+                title = clean_text(title_el.get_text()) if title_el else ""
+                
+                if not title or len(title) < 4 or "filter" in title.lower() or "wembley stadium" in title.lower():
+                    continue
 
-            link_el = card if card.name == "a" else card.find("a", href=True)
-            event_url = link_el["href"] if link_el else url
-            if event_url.startswith("/"):
-                event_url = f"https://www.wembleystadium.com{event_url}"
+                link_el = card if card.name == "a" else card.find("a", href=True)
+                event_url = link_el["href"] if link_el else url
+                if event_url.startswith("/"):
+                    event_url = f"https://www.wembleystadium.com{event_url}"
 
-            date_el = card.find(class_=re.compile(r"date|time|meta", re.I))
-            date_str = clean_text(date_el.get_text()) if date_el else ""
+                date_el = card.find(class_=re.compile(r"date|time|meta", re.I))
+                date_str = clean_text(date_el.get_text()) if date_el else ""
 
-            events.append({
-                "title": f"[Stadium] {title}",
-                "location": "Wembley Stadium, London HA9 0WS, UK",
-                "url": event_url,
-                "date_raw": date_str,
-                "venue": "Wembley Stadium"
-            })
+                events.append({
+                    "title": f"[Stadium] {title}",
+                    "location": "Wembley Stadium, London HA9 0WS, UK",
+                    "url": event_url,
+                    "date_raw": date_str,
+                    "venue": "Wembley Stadium"
+                })
     except Exception as e:
         print(f"Error fetching Wembley Stadium: {e}")
         
@@ -79,33 +125,39 @@ def fetch_ovo_arena_events():
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
         
-        cards = soup.find_all("article")
-        print(f"  Found {len(cards)} raw cards on OVO page.")
+        # 1. Try JSON-LD structured data first
+        events = extract_json_ld_events(soup, "OVO Arena", "OVO Arena Wembley, Arena Square, Engineers Way, London HA9 0AA, UK", "OVO Arena")
+        print(f"  Found {len(events)} events via JSON-LD on OVO page.")
         
-        for card in cards:
-            title_el = card.find(["h2", "h3", "h4"])
-            if not title_el:
-                continue
-                
-            title = clean_text(title_el.get_text())
-            if not title or len(title) < 3:
-                continue
+        # 2. Fallback to HTML card parsing
+        if not events:
+            cards = soup.find_all("article")
+            print(f"  Found {len(cards)} raw cards via HTML fallback.")
+            
+            for card in cards:
+                title_el = card.find(["h2", "h3", "h4"])
+                if not title_el:
+                    continue
+                    
+                title = clean_text(title_el.get_text())
+                if not title or len(title) < 3:
+                    continue
 
-            link_el = card.find("a", href=True)
-            event_url = link_el["href"] if link_el else url
-            if event_url.startswith("/"):
-                event_url = f"https://www.ovoarena.co.uk{event_url}"
+                link_el = card.find("a", href=True)
+                event_url = link_el["href"] if link_el else url
+                if event_url.startswith("/"):
+                    event_url = f"https://www.ovoarena.co.uk{event_url}"
 
-            date_el = card.find(class_=re.compile(r"date|time|day|month", re.I))
-            date_str = clean_text(date_el.get_text()) if date_el else ""
+                date_el = card.find(class_=re.compile(r"date|time|day|month", re.I))
+                date_str = clean_text(date_el.get_text()) if date_el else ""
 
-            events.append({
-                "title": f"[OVO Arena] {title}",
-                "location": "OVO Arena Wembley, Arena Square, Engineers Way, London HA9 0AA, UK",
-                "url": event_url,
-                "date_raw": date_str,
-                "venue": "OVO Arena"
-            })
+                events.append({
+                    "title": f"[OVO Arena] {title}",
+                    "location": "OVO Arena Wembley, Arena Square, Engineers Way, London HA9 0AA, UK",
+                    "url": event_url,
+                    "date_raw": date_str,
+                    "venue": "OVO Arena"
+                })
     except Exception as e:
         print(f"Error fetching OVO Arena: {e}")
         
@@ -122,15 +174,15 @@ def generate_ics(events, filename="wembley_events.ics"):
     cal.add('x-wr-timezone', 'Europe/London')
 
     parsed_count = 0
-    seen_events = set() # Master deduplication block for everything
+    seen_events = set()
 
     for event_data in events:
         start_dt = parse_event_date(event_data['date_raw'])
         
         if not start_dt:
+            print(f"  Skipping (Invalid date): {event_data['title']} (Raw: {event_data['date_raw']})")
             continue
             
-        # Strict unique key combining normalized title and exact calendar date
         dedup_key = (event_data['title'].lower(), start_dt.strftime('%Y-%m-%d'))
         if dedup_key in seen_events:
             continue
