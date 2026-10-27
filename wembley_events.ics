@@ -6,22 +6,10 @@ METHOD:PUBLISH
 X-WR-CALNAME:Wembley Events (Stadium & OVO)
 X-WR-TIMEZONE:Europe/London
 BEGIN:VEVENT
-SUMMARY:[OVO Arena] Jay Park
-DTSTART:2026-10-26 16:00:00+00:00
-DTEND;TZID=Europe/London:20261026T223000
-DTSTAMP:20261026T092837Z
-UID:d29ceeb184e5706da69216eba29e4d86@wembley-smartevents
-DESCRIPTION:Venue: OVO Arena\nSource date: 2026-10-26T18:30:00+00:00\nMore
-  info: https://www.ovoarena.co.uk/events/detail/jay-park-body-rolls-serena
- des
-LOCATION:The OVO Arena\, Wembley\, Arena Square\, Engineers Way\, Wembley 
- Park\, Wembley
-END:VEVENT
-BEGIN:VEVENT
 SUMMARY:[OVO Arena] DEADLY LIVE!
 DTSTART:2026-10-27 10:00:00+00:00
 DTEND;TZID=Europe/London:20261027T163000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:8d62259ff92e077eeec1b677c433c721@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-10-27T12:30:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/deadly-live
@@ -32,7 +20,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] TOKIO HOTEL ARENA TOUR 2026
 DTSTART:2026-10-28 16:00:00+00:00
 DTEND;TZID=Europe/London:20261028T223000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:1217779ba798faddcb95e3662d999cc9@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-10-28T18:30:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/tokio-hotel
@@ -43,7 +31,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Sunil Grover Live [POSTPONED]
 DTSTART:2026-10-29 16:30:00+00:00
 DTEND;TZID=Europe/London:20261029T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:04adc4c1771046ffcbd231892e55e8c1@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-10-29T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/sunil-grover-live
@@ -54,7 +42,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Macklemore
 DTSTART:2026-10-30 15:30:00+00:00
 DTEND;TZID=Europe/London:20261030T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:fe431005bf2d1afa5efd58551b0ebe5e@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-10-30T18:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/macklemore-1
@@ -65,7 +53,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Tamer Hosny
 DTSTART:2026-10-31 15:30:00+00:00
 DTEND;TZID=Europe/London:20261031T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:470fc1985bb23ecf63c820d4db189953@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-10-31T18:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/tamer-hosny
@@ -76,7 +64,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Synthony
 DTSTART:2026-11-01 15:30:00+00:00
 DTEND;TZID=Europe/London:20261101T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:9ea1996b859e8cb0a9dc27a223a05cf0@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-11-01T18:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/synthony
@@ -87,18 +75,18 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Gladiators Live Tour 2026
 DTSTART:2026-11-07 07:30:00+00:00
 DTEND;TZID=Europe/London:20261107T140000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:41a2c13664ecde0ea4d19035d4757326@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-11-07T10:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/gladiators-live-tour-2026
 LOCATION:The OVO Arena\, Wembley\, Arena Square\, Engineers Way\, Wembley 
- Park\, Wembley\, HA9 0AA
+ Park\, Wembley
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:[OVO Arena] Omah Lay
 DTSTART:2026-11-12 16:30:00+00:00
 DTEND;TZID=Europe/London:20261112T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:f4ba3b7777527dfe570829bba845abf5@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-11-12T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/omah-lay
@@ -109,7 +97,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] MF PRO
 DTSTART:2026-11-14 16:30:00+00:00
 DTEND;TZID=Europe/London:20261114T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:98a42b2026921019f282b5d22c06d3e7@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-11-14T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/misfits-boxing
@@ -120,7 +108,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Tayc
 DTSTART:2026-11-15 16:30:00+00:00
 DTEND;TZID=Europe/London:20261115T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:9d31c69209781860d090eda71c9364e4@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-11-15T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/tayc
@@ -131,7 +119,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Shinedown
 DTSTART:2026-11-19 16:30:00+00:00
 DTEND;TZID=Europe/London:20261119T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:fd07a8f747b48267fdd384e724d944d0@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-11-19T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/shinedown-2026
@@ -142,7 +130,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Haifa Wehbe & Ahmed Saad [POSTPONED]
 DTSTART:2026-11-20 15:30:00+00:00
 DTEND;TZID=Europe/London:20261120T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:b4bf520a9a20c94f69480d3039216c41@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-11-20T18:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/haifa-wehbe-ahmed-saad
@@ -153,7 +141,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Duke Dumont
 DTSTART:2026-11-21 15:30:00+00:00
 DTEND;TZID=Europe/London:20261121T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:42976ab5537490a315411588e742cbff@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-11-21T18:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/duke-dumont
@@ -164,7 +152,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] 2026–27 TAEMIN WORLD TOUR <LiMiNaL>
 DTSTART:2026-11-22 16:30:00+00:00
 DTEND;TZID=Europe/London:20261122T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:abf10ed2dfcb44821c313c2ed9098061@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-11-22T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/202627-taemin-world-tour
@@ -175,7 +163,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Don Toliver
 DTSTART:2026-11-24 16:00:00+00:00
 DTEND;TZID=Europe/London:20261124T223000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:4df6cdf3676ba89476e164fa474c9380@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-11-24T18:30:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/don-toliver-1
@@ -186,7 +174,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Paul Smith
 DTSTART:2026-11-26 16:30:00+00:00
 DTEND;TZID=Europe/London:20261126T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:95ef06b4e82f6337ba4fec48569daa6c@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-11-26T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/paul-smith-1
@@ -197,7 +185,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Daniel Sloss
 DTSTART:2026-11-28 16:00:00+00:00
 DTEND;TZID=Europe/London:20261128T223000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:527cdbb46e42a6cc1a94f62d8264714d@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-11-28T18:30:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/daniel-sloss
@@ -208,7 +196,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] EsDeeKid
 DTSTART:2026-12-03 16:30:00+00:00
 DTEND;TZID=Europe/London:20261203T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:484c174d1b2eef944167cec41691fdc3@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-12-03T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/esdeekid
@@ -219,7 +207,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Razorlight
 DTSTART:2026-12-04 15:30:00+00:00
 DTEND;TZID=Europe/London:20261204T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:a9a7e0758a50d2c3de35ad54da62055d@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-12-04T18:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/razorlight
@@ -230,7 +218,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Placebo 30th Anniversary Tour
 DTSTART:2026-12-05 16:30:00+00:00
 DTEND;TZID=Europe/London:20261205T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:bfd1ab7bb09149d5d4cf03e77cb618b6@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-12-05T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/placebo
@@ -241,7 +229,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Andra
 DTSTART:2026-12-06 15:00:00+00:00
 DTEND;TZID=Europe/London:20261206T213000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:6f5f9f0b6958dbd31513706732e8349b@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-12-06T17:30:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/andra
@@ -253,7 +241,7 @@ SUMMARY:[OVO Arena] CANCELLED - You Me & Comedy – Cedric the Entertainer
  \, Tiffany Haddish\, Mo’nique
 DTSTART:2026-12-07 15:30:00+00:00
 DTEND;TZID=Europe/London:20261207T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:3f3e3a464b39024de21ba54ccc41969f@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-12-07T18:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/you-me-comedy-cedric-the-e
@@ -265,7 +253,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] JAMIE.T
 DTSTART:2026-12-11 15:30:00+00:00
 DTEND;TZID=Europe/London:20261211T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:e8d6f712ffd827d8946105aa3d8d1436@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-12-11T18:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/jamiet
@@ -276,7 +264,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Jubin Nautiyal
 DTSTART:2026-12-13 16:30:00+00:00
 DTEND;TZID=Europe/London:20261213T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:0a484375269787c3da4132caecbb65bc@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-12-13T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/jubin-nautiyal-1
@@ -287,7 +275,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] The Chronicles of Giggs
 DTSTART:2026-12-16 16:30:00+00:00
 DTEND;TZID=Europe/London:20261216T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:b9fe40150231d668db3dd520c86211f5@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-12-16T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/giggs-1
@@ -298,7 +286,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] CANCELLED - Gladiators Live Tour 2026
 DTSTART:2026-12-19 07:30:00+00:00
 DTEND;TZID=Europe/London:20261219T140000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:2468de052cf7418fd8dc8abfc75fd8ef@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-12-19T10:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/gladiators-live-tour-20262
@@ -309,7 +297,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] BADE MIYAN CHOTE MIYAN
 DTSTART:2026-12-20 15:30:00+00:00
 DTEND;TZID=Europe/London:20261220T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:607b6bd4416a7f15a51c52f64e75717a@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-12-20T18:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/bade-miyan-chote-miyan
@@ -320,7 +308,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Ebi
 DTSTART:2026-12-30 15:30:00+00:00
 DTEND;TZID=Europe/London:20261230T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:a27b9d04e1a2cf173211780a7e5da770@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2026-12-30T18:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/ebi-1
@@ -331,7 +319,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Sota
 DTSTART:2027-01-30 16:30:00+00:00
 DTEND;TZID=Europe/London:20270130T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:b0e5a7094821d1a1387f5aba0e720a7a@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-01-30T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/sota
@@ -342,7 +330,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Scouting For Girls
 DTSTART:2027-02-13 15:30:00+00:00
 DTEND;TZID=Europe/London:20270213T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:e1780e967d922de849f4529773302efb@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-02-13T18:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/scouting-for-girls
@@ -353,7 +341,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Role Model Presents: Chuck On Tour
 DTSTART:2027-02-24 15:30:00+00:00
 DTEND;TZID=Europe/London:20270224T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:c12538989c113d9005b6ec44a394dccc@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-02-24T18:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/role-model-chuck-on-tour
@@ -364,7 +352,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Kacey Musgraves
 DTSTART:2027-02-26 16:00:00+00:00
 DTEND;TZID=Europe/London:20270226T223000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:13dc221ac0b65c80277cad9fada4dedc@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-02-26T18:30:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/kacey-musgraves-1
@@ -375,7 +363,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Morgan Jay
 DTSTART:2027-02-27 17:00:00+00:00
 DTEND;TZID=Europe/London:20270227T233000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:baa650cf00430823f42ab006516ef44e@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-02-27T19:30:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/morgan-jay
@@ -386,7 +374,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] The Original Harlem Globetrotters
 DTSTART:2027-03-02 17:00:00+00:00
 DTEND;TZID=Europe/London:20270302T233000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:6b36342653a2349f0d2fdc4d10ad5dd3@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-03-02T19:30:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/the-original-harlem-globet
@@ -398,7 +386,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Valery Meladze
 DTSTART:2027-03-08 15:30:00+00:00
 DTEND;TZID=Europe/London:20270308T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:7b70a8bc5f024645d661e170c568abc3@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-03-08T18:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/valery-meladze
@@ -409,7 +397,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Megadeth
 DTSTART:2027-03-11 16:30:00+00:00
 DTEND;TZID=Europe/London:20270311T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:a898dfefef291905e97f0f37f928fe7b@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-03-11T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/megadeth
@@ -420,7 +408,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] FLO
 DTSTART:2027-03-12 16:30:00+00:00
 DTEND;TZID=Europe/London:20270312T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:4d0171c60b1eb1511353801c30a44a96@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-03-12T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/flo
@@ -431,7 +419,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] RESCHEDULED DATE: Tash Sultana
 DTSTART:2027-03-13 16:30:00+00:00
 DTEND;TZID=Europe/London:20270313T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:2053013ee1f7740c95f031e8b56e9e15@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-03-13T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/tash-sultana
@@ -442,7 +430,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Disney on Ice
 DTSTART:2027-03-18 16:00:00+00:00
 DTEND;TZID=Europe/London:20270318T223000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:e09a33ffb19bafb3bfe34c2274fc668f@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-03-18T18:30:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/disney-on-ice-1
@@ -453,7 +441,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] The Jacksons
 DTSTART:2027-03-25 16:30:00+00:00
 DTEND;TZID=Europe/London:20270325T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:00ab4a356a9e08dd984e3f4c6c0df480@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-03-25T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/the-jacksons
@@ -464,7 +452,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Alkaline
 DTSTART:2027-03-26 16:30:00+00:00
 DTEND;TZID=Europe/London:20270326T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:85c52d9c494afb887c30c1624dbf0279@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-03-26T19:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/alkaline-1
@@ -475,7 +463,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Sushant KC
 DTSTART:2027-03-28 16:30:00+01:00
 DTEND;TZID=Europe/London:20270328T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:6f71e1dfb4019567e3fa1c9dfb039ace@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-03-28T19:00:00+01:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/sushant-kc
@@ -486,7 +474,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] The Warning
 DTSTART:2027-04-02 15:30:00+01:00
 DTEND;TZID=Europe/London:20270402T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:28b4c0a6a5887ff207298d65ea0f52ec@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-04-02T18:00:00+01:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/the-warning
@@ -497,7 +485,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Palaye Royale
 DTSTART:2027-04-03 15:30:00+01:00
 DTEND;TZID=Europe/London:20270403T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:09f742aabb97714ad763e0704a904ce1@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-04-03T18:00:00+01:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/palaye-royale-1
@@ -508,7 +496,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] 2hollis
 DTSTART:2027-04-07 16:30:00+01:00
 DTEND;TZID=Europe/London:20270407T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:188a5c38363c0f01056a0b52554a779c@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-04-07T19:00:00+01:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/2hollis
@@ -519,7 +507,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] James Marriott
 DTSTART:2027-04-09 15:30:00+01:00
 DTEND;TZID=Europe/London:20270409T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:96c508b4c9f3d961d3a0279f6663ee85@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-04-09T18:00:00+01:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/james-marriott
@@ -530,7 +518,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Blue Planet III Live in Concert
 DTSTART:2027-06-04 16:30:00+01:00
 DTEND;TZID=Europe/London:20270604T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:a07bff7d3d5c92aaa2a719d294175983@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-06-04T19:00:00+01:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/blue-planet-iii
@@ -541,7 +529,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] TOTO
 DTSTART:2027-06-25 15:30:00+01:00
 DTEND;TZID=Europe/London:20270625T220000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:26c1889d7d68538e4775f739115afa1c@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-06-25T18:00:00+01:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/toto-1
@@ -552,7 +540,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] André Rieu
 DTSTART:2027-09-17 16:30:00+01:00
 DTEND;TZID=Europe/London:20270917T230000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:9b9fd1dd86bec59f786ad319ffe81c2f@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-09-17T19:00:00+01:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/andre-rieu-17
@@ -563,7 +551,7 @@ BEGIN:VEVENT
 SUMMARY:[OVO Arena] Frank Turner presents: Lost Evenings X
 DTSTART:2027-11-04 14:30:00+00:00
 DTEND;TZID=Europe/London:20271104T210000
-DTSTAMP:20261026T092837Z
+DTSTAMP:20261027T092554Z
 UID:cc4b47eac7412a35f2d498d9de9c8465@wembley-smartevents
 DESCRIPTION:Venue: OVO Arena\nSource date: 2027-11-04T17:00:00+00:00\nMore
   info: https://www.ovoarena.co.uk/events/detail/frank-turner
